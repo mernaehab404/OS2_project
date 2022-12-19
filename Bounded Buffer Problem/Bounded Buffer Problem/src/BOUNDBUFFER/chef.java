@@ -17,6 +17,7 @@ public class chef  implements Runnable{
 // int productionSize=4;//Total no of items to be produced by each producer
 int producedItem=0; 
  int producerNo;
+   int productionSize=5;
 
  
  public chef(List<Integer> sharedQueue, int producerNo) {
@@ -26,7 +27,7 @@ int producedItem=0;
 
  @Override
  public void run() {
-     for (int i = 1; i <= maxSize; i++) { //produce products.
+     for (int i = 1; i <= productionSize; i++) { //produce products.
          try {
              produce(i);
          } catch (InterruptedException e) {  e.printStackTrace(); }
@@ -43,10 +44,10 @@ int producedItem=0;
              sharedQueue.wait();
          }
 
-       //Bcz each producer must produce unique product
+       // each producer must produce unique product
              //Ex= producer0 will produce 1-5  and producer1 will produce 6-10 in random order
-            
-       int producedItem =+ i;  
+             int producedItem =producerNo + i;
+//       int producedItem =+ i;  
        
        Mainframe.jTextArea1.append(Thread.currentThread().getName() +" Produced : " + producedItem+"\n");
        sharedQueue.add(producedItem);

@@ -16,7 +16,7 @@ import java.util.List;
  private int maxSize=4; //maximum number of products which sharedQueue can hold at a time.
 int producedItem=0; 
  int producerNo;
-
+  int productionSize=5;
  
  public producer(List<Integer> sharedQueue, int producerNo) {
      this.sharedQueue = sharedQueue;
@@ -25,7 +25,7 @@ int producedItem=0;
 
  @Override
  public void run() {
-     for (int i = 1; i <= maxSize; i++) { //produce products.
+     for (int i = 1; i <=productionSize; i++) { //produce products.
          try {
              produce(i);
          } catch (InterruptedException e) {  e.printStackTrace(); }
@@ -37,17 +37,19 @@ int producedItem=0;
       synchronized(sharedQueue) {
        //if sharedQuey is full wait until consumer consumes.
        while (sharedQueue.size() == maxSize) {
+//             System.out.printf(Thread.currentThread().getName()+", Queue is full, producerThread is waiting for "
+//                    + "consuomerThread to consume, sharedQueue's size= "+maxSize+"\n");
              Mainframe.jTextArea1.append(Thread.currentThread().getName()+", Queue is full, produceThread is waiting for "
-                    + "consumerThread to consume, sharedQueue's size= "+maxSize+"\n");
+                 + "consumerThread to consume, sharedQueue's size= "+maxSize+"\n");
              sharedQueue.wait();
          }
 
-       //Bcz each producer must produce unique product
+  
              //Ex= producer0 will produce 1-5  and producer1 will produce 6-10 in random order
-            
-       int producedItem =+ i;  
-       
-       Mainframe.jTextArea1.append(Thread.currentThread().getName() +" Produced : " + producedItem+"\n");
+       //  int producedItem =(productionSize*producerNo)+ i; 
+       int producedItem =producerNo + i;  
+//        System.out.printf(Thread.currentThread().getName() +" Produced : " + producedItem+"\n");
+      Mainframe.jTextArea1.append(Thread.currentThread().getName() +" Produced : " + producedItem+"\n");
        sharedQueue.add(producedItem);
          Thread.sleep((long)(Math.random() * 1000));
          sharedQueue.notify();

@@ -31,12 +31,15 @@ public class Consumer implements Runnable{
     synchronized(sharedQueue) {
        //if sharedQuey is empty wait until producer produces.
        while (sharedQueue.size() == 0) {
+//             System.out.printf(Thread.currentThread().getName()+", Queue is empty, consumerThread is waiting for "
+//                           + "producerThread to produce, sharedQueue's size= 0\n");
            Mainframe.jTextArea1.append(Thread.currentThread().getName()+", Queue is empty, customerThread is waiting for "
                            + "chefThread to produce, sharedQueue's size= 0\n");
              sharedQueue.wait();
          }
 
        Thread.sleep((long)(Math.random() * 2000));
+//        System.out.printf(Thread.currentThread().getName()+", CONSUMED : "+ sharedQueue.remove(0)+"\n");
          Mainframe.jTextArea1.append(Thread.currentThread().getName()+", CONSUMED : "+ sharedQueue.remove(0)+"\n");
          sharedQueue.notify();
      }
